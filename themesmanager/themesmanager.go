@@ -62,5 +62,9 @@ type TemplateData struct {
 // At its core themesmanager is about serving a directory of themes and connecting it with a KV store in order to make HTML pages.
 // It feels like it could stand on its own and could be useful to someone else, which is why I thought of making it an independent package.
 
+// Or maybe themesmanager just has to concern itself with reading the themes and data, it doesn't have to care about how the data is set?
+// pagemanager can do that without themesmanager by simply injecting the correspoding script into the page
+// but uhhh that means theme authors lose the ability to set data using vanilla themesmanager, which is unacceptable.
+
 // a template is uniquely identified by its themePath and templateName. Therefore the resultant *template.Template, TemplateVariables, ContentSecurityPolicy can be cached
 // Also it needs a KV store
