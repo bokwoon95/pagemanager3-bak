@@ -11,7 +11,7 @@ import (
 	"golang.org/x/crypto/argon2"
 )
 
-type KeyParams struct {
+type Params struct {
 	Memory  uint32
 	Time    uint32
 	Threads uint8
@@ -20,8 +20,8 @@ type KeyParams struct {
 	err     error
 }
 
-func NewKeyParams(salt []byte) KeyParams {
-	p := KeyParams{
+func NewParams(salt []byte) Params {
+	p := Params{
 		Memory:  64 * 1024,
 		Time:    1,
 		Threads: 4,
@@ -35,7 +35,7 @@ func NewKeyParams(salt []byte) KeyParams {
 	return p
 }
 
-func (p KeyParams) MarshalText() (text []byte, err error) {
+func (p Params) MarshalText() (text []byte, err error) {
 	// format: $argon2id$v=%d$m=%d,t=%d,p=%d,l=%d$<base64 salt>$
 	if p.err != nil {
 		return nil, p.err
@@ -63,7 +63,7 @@ func (p KeyParams) MarshalText() (text []byte, err error) {
 	return buf, nil
 }
 
-func (p *KeyParams) UnmarshalText(text []byte) error {
+func (p *Params) UnmarshalText(text []byte) error {
 	// format: $argon2id$v=%d$m=%d,t=%d,p=%d,l=%d$<base64 salt>$
 	// parts[0] = <empty string>
 	// parts[1] = argon2id
@@ -91,14 +91,14 @@ func (p *KeyParams) UnmarshalText(text []byte) error {
 	return nil
 }
 
-func DeriveKey(password []byte, params KeyParams) (key []byte, err error) {
+func DeriveKey(password []byte, params Params) (key []byte, err error) {
 	if params.err != nil {
 		return nil, params.err
 	}
 	return argon2.IDKey(password, params.Salt, params.Time, params.Memory, params.Threads, params.KeyLen), nil
 }
 
-func GenerateFromPassword(password []byte, params KeyParams) (passwordHash []byte, err error) {
+func GenerateFromPassword(password []byte, params Params) (passwordHash []byte, err error) {
 	_, params.err = rand.Read(params.Salt)
 	passwordHash, err = params.MarshalText()
 	if err != nil {
@@ -117,7 +117,7 @@ func CompareHashAndPassword(passwordHash []byte, password []byte) error {
 	if i < 0 {
 		return fmt.Errorf("invalid passwordHash")
 	}
-	var params KeyParams
+	var params Params
 	err := params.UnmarshalText(passwordHash[:i+1])
 	if err != nil {
 		return err

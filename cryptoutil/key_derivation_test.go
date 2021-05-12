@@ -12,7 +12,7 @@ func Test_Password(t *testing.T) {
 	t.Run("basic", func(t *testing.T) {
 		const password = "password"
 		is := testutil.New(t, testutil.Parallel)
-		hashedPassword, err := GenerateFromPassword([]byte(password), NewKeyParams(nil))
+		hashedPassword, err := GenerateFromPassword([]byte(password), NewParams(nil))
 		is.NoErr(err)
 		fmt.Println(string(hashedPassword))
 		err = CompareHashAndPassword(hashedPassword, []byte(password))
@@ -24,11 +24,11 @@ func Test_KeyDerivation(t *testing.T) {
 	t.Run("basic", func(t *testing.T) {
 		const password = "password"
 		is := testutil.New(t, testutil.Parallel)
-		params := NewKeyParams(nil)
+		params := NewParams(nil)
 		fmt.Printf("%+v\n", params)
 		key, err := DeriveKey([]byte(password), params)
 		is.NoErr(err)
-		var params2 KeyParams
+		var params2 Params
 		b, err := params.MarshalText()
 		is.NoErr(err)
 		err = params2.UnmarshalText(b)

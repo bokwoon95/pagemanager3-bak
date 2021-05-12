@@ -84,11 +84,11 @@ func setPassword(store interface {
 	SetPasswordMetadata(PasswordMetadata) error
 }, password []byte) (pwKey []byte, err error) {
 	var metadata PasswordMetadata
-	metadata.PasswordHash, err = GenerateFromPassword(password, NewKeyParams(nil))
+	metadata.PasswordHash, err = GenerateFromPassword(password, NewParams(nil))
 	if err != nil {
 		return nil, err
 	}
-	keyParams := NewKeyParams(nil)
+	keyParams := NewParams(nil)
 	metadata.KeyParams, err = keyParams.MarshalText()
 	if err != nil {
 		return nil, err
@@ -127,7 +127,7 @@ func (box *PasswordBox) EnterPassword(password []byte) error {
 	if err != nil {
 		return err
 	}
-	var keyParams KeyParams
+	var keyParams Params
 	err = keyParams.UnmarshalText(metadata.KeyParams)
 	if err != nil {
 		return err
@@ -190,7 +190,7 @@ func (box *PasswordBox) ChangePassword(oldPassword, newPassword []byte) error {
 		if box.keyStore == nil {
 			return nil
 		}
-		var oldKeyParams KeyParams
+		var oldKeyParams Params
 		err2 = oldKeyParams.UnmarshalText(metadata.KeyParams)
 		if err2 != nil {
 			return err2
