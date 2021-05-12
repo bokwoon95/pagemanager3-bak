@@ -1,0 +1,13 @@
+func encrypt(key []byte, plaintext []byte) (ciphertext []byte)
+func decrypt(key []byte, ciphertext []byte) (plaintext []byte, ok bool)
+func hashmsg(key []byte, msg []byte) (hash []byte)
+func deriveKey(store PasswordStore, password []byte) (key []byte, err error)
+
+key, keyParams := deriveKey(box.pwStore, oldPassword)
+
+key.Contents, ok = decrypt(oldKey, key.Contents)
+key.Contents = encrypt(newKey, key.Contents)
+
+deriveKey from old password, from password store
+deriveKey from new password, from newly generated params
+I think not worth having a special function for this, just do it directly

@@ -1,0 +1,17 @@
+themesmanager
+localesmanager
+imagemanager
+pluginsmanager
+
+themesmanager
+ServeTemplate(w http.ResponseWriter, r *http.Request, themeID string, templateName string) error
+a ThemesStore can retrieve themes and templates in a performant way
+a Theme consists of
+- an fs.FS
+- theme metadata
+- a collection of templates and their metadata
+A template must provide hooks for injecting in additional CSS/JS/CSP into the page
+important: a ThemesManager is ultmately backed by just an fs.FS.
+Because any other store can implement an fs.FS, this ensures that a ThemesManager can be backed by a KV store or SQL store if one so wished.
+However it is not responsible for writing anything back into the fs.FS, it operates purely as read-only
+To add or modify themes, one should interact with the underlying fs.FS directly. That is up to the user's implementation already.
