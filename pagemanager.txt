@@ -15,3 +15,24 @@ important: a ThemesManager is ultmately backed by just an fs.FS.
 Because any other store can implement an fs.FS, this ensures that a ThemesManager can be backed by a KV store or SQL store if one so wished.
 However it is not responsible for writing anything back into the fs.FS, it operates purely as read-only
 To add or modify themes, one should interact with the underlying fs.FS directly. That is up to the user's implementation already.
+
+By default failing themes do not get flagged out an init time, only execute time. This behaviour can be changed.
+
+PasswordStore
+KeyStore
+PageStore
+UserStore
+SessionStore
+LocalesStore
+(Am I right to say that I almost never need a join across these Store boundaries?)
+
+SessionStore yields the UserID
+Then you do a lookup in the UserStore with the UserID
+- What about sharding the
+*values* carry across boundaries! So plugins only have to reference the userID in order to reference a user. By default they should never need to do a join on anything other than the userID.
+
+UserID is now a ULID/KSUID. Translates more universally across data stores, and you gain distributed generation as a side effect well. Time-sortable means it should not fragment the database pages as much as a truly random UUID.
+
+For littlsites.net, all users will be backed by one (or multiple) postgres databases. This is because postgres allows me to set size limits per schema. Every user now has their own schema (identified by their user id), and an insert level trigger is added to check if the user has exceeded their database size limit.
+I think the only way to enforce data size limits per user is to dynamically modify the triggers on each table. i.e. when the user upgrades their data limit, I update the trigger on their associated tables.
+There is so much complexity that comes with trying to enforce per-account data size limits. Maybe I can skip out on it first and only implement it when the database starts ballooning in size.

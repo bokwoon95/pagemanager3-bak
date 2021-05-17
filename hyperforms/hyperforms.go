@@ -30,7 +30,7 @@ func New(w http.ResponseWriter, r *http.Request) *Form {
 			return
 		}
 		defer http.SetCookie(w, &http.Cookie{Name: validationCookieName, MaxAge: -1})
-		b, err := box.Base64VerifyHash([]byte(c.Value))
+		b, err := box.HashDecode([]byte(c.Value))
 		if err != nil {
 			return
 		}
@@ -100,7 +100,7 @@ func (f *Form) Redirect(w http.ResponseWriter, r *http.Request, url string) erro
 	if err != nil {
 		return fmt.Errorf("%+v: failed gob encoding %s", errMsgs, err.Error())
 	}
-	value, err := box.Base64Hash(buf.Bytes())
+	value, err := box.HashEncode(buf.Bytes())
 	if err != nil {
 		return err
 	}

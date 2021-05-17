@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/davecgh/go-spew v1.1.1
+	github.com/dop251/goja v0.0.0-20210427212725-462d53687b0d
 	github.com/google/go-cmp v0.5.5
 	github.com/google/uuid v1.2.0
 	github.com/lib/pq v1.10.1
