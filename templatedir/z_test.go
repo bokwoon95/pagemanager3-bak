@@ -87,25 +87,10 @@ func Test_Assets(t *testing.T) {
 		"/templatedir/plainsimple/config.js",
 		"/templatedir/plainsimple/index.config.js",
 		"/templatedir/plainsimple/index.html",
-		"/templatedir/plainsimple/index.css",
+		"/templatedir/plainsimple/index.sha256-0123456789.css",
 	} {
 		rr = httptest.NewRecorder()
 		dir.Assets(next).ServeHTTP(rr, newrequest(url))
 		fmt.Println(url, rr.Result().Status, rr.Body.String())
 	}
 }
-
-// runtime options:
-// disable CSP?
-// set localeCode?
-// set editMode?
-// add CSS paths?
-// add JS paths?
-// buffer response?
-// cache config?
-//
-// data-namespace
-// data-name
-// data-row
-// data-row.name
-// data-row.href
