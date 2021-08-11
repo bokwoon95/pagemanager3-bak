@@ -1,0 +1,39 @@
+https://www.reddit.com/r/golang/comments/n178pl/reading_database_metadata_schema/
+https://github.com/golang/go/issues/7408
+
+if table doesn't exist, create it
+else if table column doesn't exist, create it
+else if table column exists but is of different type
+    if conflicthandler has been defined for that table column, invoke it
+    else return an error
+else if table column exists and types match but constraints are different
+
+Thre 3 headaches:
+Constraints
+    You can define constraints in code
+Views
+    You can define and call views in code
+Functions/Stored Procedures
+    You can call functions in code, but cannot define them
+
+type Table struct
+type Column struct
+GetTables()
+
+
+Selectx(func(row *sq.Row) {
+    data.One = row.Int(tbl.ONE)
+    data.Two = row.String(tbl.TWO)
+    data.Three = row.Time(tbl.THREE)
+    row.Process(func() error {
+        datas = append(datas, data)
+        return nil
+    })
+    row.Stop()
+})
+
+sq.Postgres(dialect).Update(KEYS).Set(KEYS.STATUS.SetInt(int(status))).Where(KEYS.KEY_ID.In(IDs))
+
+sq.Postgres(dialect).From(KEYS).Where(KEYS.STATUS.EqInt(int(status))).Limit(int64(limit))
+
+change params from map[string]int to map[string][]int because the user may want to assign the same param to multiple locations

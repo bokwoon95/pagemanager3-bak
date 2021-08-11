@@ -18,13 +18,15 @@ To add or modify themes, one should interact with the underlying fs.FS directly.
 
 By default failing themes do not get flagged out an init time, only execute time. This behaviour can be changed.
 
-PasswordStore
-KeyStore
-PageStore
-UserStore
+PasswordStore sql_password_store
+KeyStore sql_key_store
+PageStore sql_page_store
+UserStore sql_user_store
 SessionStore
 LocalesStore
 (Am I right to say that I almost never need a join across these Store boundaries?)
+(Wait no, I need to join SessionStore and UserStore for session-specific user data)
+(Unless I forget session data altogether. Plugins that actually need server-side session data, like ecommerce, can implement their own session tables)
 
 SessionStore yields the UserID
 Then you do a lookup in the UserStore with the UserID

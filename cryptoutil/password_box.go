@@ -176,6 +176,9 @@ func (box *PasswordBox) ChangePassword(oldPassword, newPassword []byte) error {
 	if err != nil {
 		return err
 	}
+	// TODO: don't hold a artificially hold a transaction open for something else.
+	// slide 72 of https://www.slideshare.net/MarkusWinand/sql-transactions-what-they-are-good-for-and-how-they-work
+	// rework the interfaces such that the passwordbox and keybox transactions are integrated
 	err = func() (err2 error) {
 		defer commitOrRollback(pwTx, &err2)
 		var metadata *PasswordMetadata
