@@ -11,6 +11,12 @@ import (
 	hy "github.com/bokwoon95/pagemanager/hypergo"
 )
 
+// TODO: I've figured out how to use errors instead of errmsgs. This package
+// needs its own custom NewError() constructor that returns an error that can
+// be gob encoded. The custom error is based on strings, not pointers, so
+// errors of the same string are fungible. If the user passes in an
+// errors.errorString instead
+
 type Form struct {
 	attrs        hy.Attributes
 	children     []hy.Element
